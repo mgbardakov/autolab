@@ -8,8 +8,7 @@ import java.io.OutputStream;
 public interface ReportGenerator {
     /**
      * creates for 18 report.
-     * @param store - storage
      * @return output stream of the report file
      */
-    OutputStream create18Form(Store store);
+    OutputStream create18Form();
 }
