@@ -49,4 +49,19 @@ public interface Store {
      * @return list of records with the same type and factor
      */
     List<Record> getRecordsByTypeAndFactor(String type, String factor);
+
+    /**
+     * loads data from some source.
+     * @param loader - specific loader
+     * @return success/failure
+     */
+    boolean loadData(Loader loader);
+
+    /**
+     * saves specific report into specific output.
+     * @param generator - specific generator
+     * @param output - specific output
+     * @return success/failure
+     */
+    boolean saveReport(ReportGenerator generator, Output output);
 }

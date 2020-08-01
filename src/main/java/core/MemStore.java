@@ -8,27 +8,6 @@ import java.util.List;
  * @since 29.07.2020
  */
 public final class MemStore implements Store {
-    /**
-     * current report engine.
-     */
-    private ReportGenerator generator;
-    /**
-     * current loader.
-     */
-    private Loader loader;
-
-    /**
-     * main  constructor.
-     * @param currentGenerator - current report engine
-     * @param currentLoader - current loader
-     */
-    public MemStore(final ReportGenerator currentGenerator,
-                    final Loader currentLoader
-    ) {
-        this.generator = currentGenerator;
-        this.loader = currentLoader;
-    }
-
     @Override
     public Record addNewRecord() {
         return null;
@@ -63,5 +42,16 @@ public final class MemStore implements Store {
     public List<Record> getRecordsByTypeAndFactor(
             final String type, final String factor) {
         return null;
+    }
+    @Override
+    public boolean loadData(final Loader loader) {
+        return false;
+    }
+
+    @Override
+    public boolean saveReport(
+            final ReportGenerator generator, final Output output
+    ) {
+        return false;
     }
 }

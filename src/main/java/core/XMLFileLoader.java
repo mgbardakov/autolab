@@ -1,5 +1,7 @@
 package core;
 
+import java.util.stream.Stream;
+
 /**
  * implementation of loader using xml file input.
  * @author mbardakov
@@ -20,7 +22,7 @@ public final class XMLFileLoader implements Loader {
     }
 
     @Override
-    public String[] getRecordFieldPool() {
+    public Stream<String[]> getRecordFieldPools() {
         return null;
     }
 }

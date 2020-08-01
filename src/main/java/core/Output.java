@@ -1,6 +1,5 @@
 package core;
 
-import java.io.OutputStream;
 
 /** output interface for reports.
  * @author mbardakov
@@ -9,8 +8,8 @@ import java.io.OutputStream;
 public interface Output {
     /**
      * process the file.
-     * @param ros - report outputStream
+     * @param report - report byte array
      * @return success/failure
      */
-    boolean unloadReport(OutputStream ros);
+    boolean unloadReport(byte[] report);
 }
