@@ -9,9 +9,10 @@ import java.util.List;
 public interface Store {
     /**
      * adds new record to the storage.
+     * @param record to add.
      * @return created record
      */
-    Record addNewRecord();
+    Record addNewRecord(Record record);
     /**
      * updates record by id.
      * @param id - record id

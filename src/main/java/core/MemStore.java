@@ -9,7 +9,7 @@ import java.util.List;
  */
 public final class MemStore implements Store {
     @Override
-    public Record addNewRecord() {
+    public Record addNewRecord(final Record record) {
         return null;
     }
 

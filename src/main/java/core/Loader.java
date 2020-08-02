@@ -1,6 +1,6 @@
 package core;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 /**
  * interface for loading information to the storage.
@@ -12,5 +12,11 @@ public interface Loader {
      * gets pool of values to fill new record.
      * @return string array of values
      */
-    Stream<String[]> getRecordFieldPools();
+    List<Record> getRecordList();
+
+    /**
+     * loads data to store.
+     * @return success / failure
+     */
+    boolean loadDataToStore();
 }
