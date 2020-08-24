@@ -28,8 +28,8 @@ public class SpbXMLFileLoaderTest {
         expected.setReasonAttributes("61271 от 29.03.2017г.");
         expected.setPurpose(Record.Purpose.COMMERCIAL);
         expected.addProtocol("РМ",
-                "микроклимат", 2, 0);
-        expected.addProtocol("РМ", "освещенность",
+                "MK", 2, 0);
+        expected.addProtocol("РМ", "OSV",
                 1, 0);
         var expectedList = List.of(expected);
         Loader loader = new SpbXMLFileLoader(new StubInput(new String[] {

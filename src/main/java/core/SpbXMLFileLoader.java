@@ -187,21 +187,12 @@ public final class SpbXMLFileLoader implements Loader {
     }
     private void factorsInit() {
         factorPool = new HashMap<>();
-        factorPool.put(getIntProperty("MK"), "микроклимат");
-        factorPool.put(getIntProperty("OSV"), "освещенность");
-        factorPool.put(getIntProperty("SHUM"), "шум");
-        factorPool.put(getIntProperty("VIBR"), "вибрация");
-        factorPool.put(getIntProperty("EPK"), "эмиПК");
-        factorPool.put(getIntProperty("E50"), "эми50Гц");
-        factorPool.put(getIntProperty("MD"), "МД");
-        factorPool.put(getIntProperty("EROA"), "ЭРОА");
-        factorPool.put(getIntProperty("PPR"), "ППР");
-        factorPool.put(getIntProperty("AER"), "аэроионы");
-        factorPool.put(getIntProperty("IZ"), "инфразвук");
-        factorPool.put(getIntProperty("IK"), "ИК");
-        factorPool.put(getIntProperty("UF"), "УФ");
-        factorPool.put(getIntProperty("EPPE"), "эмиППЭ");
-        factorPool.put(getIntProperty("PULS"), "пульсация");
+        var keyArray = new String[] {"MK", "OSV", "SHUM", "VIBR", "EPK", "E50",
+        "MD", "EROA","PPR", "AER", "IZ", "IK", "UF", "EPPE", "PULS"};
+        for(String key : keyArray) {
+            factorPool.put(getIntProperty(key), key);
+        }
+
     }
 
     private void initRecord(final Record record, final Row row) {
