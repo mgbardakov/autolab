@@ -85,7 +85,7 @@ public final class SpbXMLFileLoader implements Loader {
 
     @Override
     public List<Record> getRecordList() {
-        var path = input.askString("Enter source file path");
+        var path = input.askString("Enter source file path: ");
         var list = new ArrayList<Record>();
         try (var workBook = new XSSFWorkbook(path)) {
             var sheet = workBook.getSheetAt(0);
@@ -188,8 +188,8 @@ public final class SpbXMLFileLoader implements Loader {
     private void factorsInit() {
         factorPool = new HashMap<>();
         var keyArray = new String[] {"MK", "OSV", "SHUM", "VIBR", "EPK", "E50",
-        "MD", "EROA","PPR", "AER", "IZ", "IK", "UF", "EPPE", "PULS"};
-        for(String key : keyArray) {
+        "MD", "EROA", "PPR", "AER", "IZ", "IK", "UF", "EPPE", "PULS"};
+        for (String key : keyArray) {
             factorPool.put(getIntProperty(key), key);
         }
 

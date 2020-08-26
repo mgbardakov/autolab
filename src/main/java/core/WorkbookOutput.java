@@ -1,15 +1,17 @@
 package core;
 
 
+import org.apache.poi.ss.usermodel.Workbook;
+
 /** output interface for reports.
  * @author mbardakov
  * @since 28.07.2020
  */
-public interface Output {
+public interface WorkbookOutput {
     /**
      * process the file.
-     * @param report - report byte array
+     * @param workbook - apache POI workbook
      * @return success/failure
      */
-    boolean unloadReport(byte[] report);
+    boolean saveReport(Workbook workbook);
 }
