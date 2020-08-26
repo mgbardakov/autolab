@@ -1,4 +1,4 @@
-package core;
+package core.output;
 
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -25,14 +25,11 @@ public final class FileWorkbookOutput implements WorkbookOutput {
     }
 
     @Override
-    public boolean saveReport(Workbook workbook) {
-        try (var fos = new FileOutputStream(path)) {
-            workbook.write(fos);
-            workbook.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("File not found");
-        }
-        return false;
+    public boolean saveReport(final Workbook workbook) throws IOException {
+        var fos = new FileOutputStream(path);
+        workbook.write(fos);
+        workbook.close();
+        fos.close();
+        return true;
     }
 }

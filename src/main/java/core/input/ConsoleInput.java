@@ -1,4 +1,4 @@
-package core;
+package core.input;
 
 import java.util.Scanner;
 import java.util.function.Consumer;

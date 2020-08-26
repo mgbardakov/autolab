@@ -1,7 +1,8 @@
-package core;
+package core.storage;
+
+import core.Record;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * implementation of store interface using RAM.

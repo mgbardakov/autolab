@@ -1,4 +1,4 @@
-package core;
+package core.input;
 
 /**
  * interface for basic input.

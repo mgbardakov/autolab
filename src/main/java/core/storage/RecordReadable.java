@@ -1,4 +1,6 @@
-package core;
+package core.storage;
+
+import core.Record;
 
 import java.util.List;
 

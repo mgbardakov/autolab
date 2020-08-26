@@ -1,7 +1,9 @@
-package core;
+package core.output;
 
 
 import org.apache.poi.ss.usermodel.Workbook;
+
+import java.io.IOException;
 
 /** output interface for reports.
  * @author mbardakov
@@ -13,5 +15,5 @@ public interface WorkbookOutput {
      * @param workbook - apache POI workbook
      * @return success/failure
      */
-    boolean saveReport(Workbook workbook);
+    boolean saveReport(Workbook workbook) throws IOException;
 }

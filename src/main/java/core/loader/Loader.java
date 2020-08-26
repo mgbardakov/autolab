@@ -1,4 +1,6 @@
-package core;
+package core.loader;
+
+import core.Record;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
-package core;
+package core.storage;
 
-import java.util.List;
-import java.util.Set;
+import core.Record;
 
 /** storage interface.
  * @author mbardakov

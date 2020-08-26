@@ -1,4 +1,4 @@
-package core;
+package core.generator;
 
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -12,4 +12,10 @@ public interface ReportGenerator {
      * @return report file in file
      */
     Workbook createReport();
+
+    /**
+     * getter for report name.
+     * @return report name
+     */
+    String getReportName();
 }

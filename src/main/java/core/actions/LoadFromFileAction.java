@@ -1,4 +1,8 @@
-package core;
+package core.actions;
+
+import core.input.Input;
+import core.loader.SpbXMLFileLoader;
+import core.storage.Store;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -8,7 +12,7 @@ import java.util.function.Consumer;
  * @author mbardakov
  * @since 26.08.2020
  */
-public class LoadFromFileAction implements Action {
+public final class LoadFromFileAction implements Action {
     /**
      * current loader.
      */
@@ -21,7 +25,16 @@ public class LoadFromFileAction implements Action {
      * local output consumer.
      */
     private Consumer<String> con;
-
+    /**
+     * action name.
+     */
+    private static final String NAME = "Load data from file";
+    /**
+     * basic constructor.
+     * @param newStore - storage
+     * @param newInput - user input
+     * @param newCon - consumer for user output
+     */
     public LoadFromFileAction(final Store newStore, final Input newInput,
                               final Consumer<String> newCon) {
         this.store = newStore;
@@ -30,7 +43,7 @@ public class LoadFromFileAction implements Action {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         while (true) {
             try {
                 var filePath = input.askString(
@@ -44,5 +57,11 @@ public class LoadFromFileAction implements Action {
                 con.accept("File not found, try again");
             }
         }
+        return true;
+    }
+
+    @Override
+    public String getActionName() {
+        return NAME;
     }
 }

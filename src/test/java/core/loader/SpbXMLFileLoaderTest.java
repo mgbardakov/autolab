@@ -1,5 +1,7 @@
-package core;
+package core.loader;
 
+import core.Record;
+import core.storage.MemStore;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;

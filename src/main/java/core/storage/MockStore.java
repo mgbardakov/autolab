@@ -1,9 +1,9 @@
-package core;
+package core.storage;
+
+import core.Record;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * mock class for unit tests.
@@ -17,11 +17,11 @@ public final  class MockStore implements RecordReadable {
     private List<Record> records;
 
     /**
-     * basic constructor
-     * @param records mock store object with filled record list.
+     * basic constructor.
+     * @param newRecords mock store object with filled record list.
      */
-    public MockStore(List<Record> records) {
-        this.records = records;
+    public MockStore(final List<Record> newRecords) {
+        this.records = newRecords;
     }
 
     @Override

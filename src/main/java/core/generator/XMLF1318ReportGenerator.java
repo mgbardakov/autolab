@@ -1,5 +1,7 @@
-package core;
+package core.generator;
 
+import core.Record;
+import core.storage.RecordReadable;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -15,6 +17,10 @@ import java.util.Properties;
  * @since 31.07.2020
  */
 public final class XMLF1318ReportGenerator implements ReportGenerator {
+    /**
+     * report name.
+     */
+    private static final String REPORT_NAME = "13-18 form table 4";
     /**
      * current store.
      */
@@ -45,7 +51,9 @@ public final class XMLF1318ReportGenerator implements ReportGenerator {
      * @param newStore - current store
      * @throws IOException properties exception
      */
-    public XMLF1318ReportGenerator(final RecordReadable newStore) throws IOException {
+    public XMLF1318ReportGenerator(
+            final RecordReadable newStore
+    ) throws IOException {
         this(newStore, "genConfig.properties", "templateF1318.xlsx");
     }
     /**
@@ -69,7 +77,10 @@ public final class XMLF1318ReportGenerator implements ReportGenerator {
         this.props.load(is);
         this.templatePath = newTemplatePath;
     }
-
+    @Override
+    public String getReportName() {
+        return REPORT_NAME;
+    }
     @Override
     public Workbook createReport() {
         Workbook rsl = null;
@@ -136,8 +147,8 @@ public final class XMLF1318ReportGenerator implements ReportGenerator {
     }
 
     private void fillWorkbookWithValues(
-            Map<String, Map<String, Integer[]>> valuesMap,
-            XSSFWorkbook workBook) {
+            final Map<String, Map<String, Integer[]>> valuesMap,
+            final XSSFWorkbook workBook) {
         var sheet = workBook.getSheetAt(0);
         var rowCount = Integer.parseInt(props.getProperty("START_ROW"));
         var cellCount = Integer.parseInt(props.getProperty("START_CELL"));

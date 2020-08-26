@@ -1,4 +1,5 @@
-package core;
+package core.input;
+
 
 public final class StubInput implements Input {
     /**

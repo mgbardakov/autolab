@@ -1,5 +1,7 @@
-package core;
+package core.loader;
 
+import core.Record;
+import core.storage.Store;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
