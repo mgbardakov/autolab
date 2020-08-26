@@ -32,9 +32,9 @@ public class SpbXMLFileLoaderTest {
         expected.addProtocol("РМ", "OSV",
                 1, 0);
         var expectedList = List.of(expected);
-        Loader loader = new SpbXMLFileLoader(new StubInput(new String[] {
+        Loader loader = new SpbXMLFileLoader(
                 "src/test/resources/testFileDataSource.xlsx",
-                }), "loaderConfigTest.properties", new MemStore());
+                "loaderConfigTest.properties", new MemStore());
         var actual = loader.getRecordList();
         assert actual != null;
         assertThat(actual, is(expectedList));

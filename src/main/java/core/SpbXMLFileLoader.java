@@ -25,7 +25,7 @@ public final class SpbXMLFileLoader implements Loader {
     /**
      * current input.
      */
-    private Input input;
+    private String filePath;
     /**
      * cells indexes from configuration file.
      */
@@ -44,15 +44,14 @@ public final class SpbXMLFileLoader implements Loader {
     private static final  String DEF_CONF_FILE = "loaderconfig.properties";
     /**
      * basic constructor.
-     * @param currentInput - user input source
+     * @param currentFilePath - path to the source data file
      * @param cfgFileName - configuration file name
      * @param currentStore - storage
      * @throws IOException - properties exception
      */
-    public SpbXMLFileLoader(final Input currentInput,
+    public SpbXMLFileLoader(final String currentFilePath,
                             final String cfgFileName,
                             final Store currentStore) throws IOException {
-        this.input = currentInput;
         ClassLoader classloader = Thread.currentThread()
                 .getContextClassLoader();
         InputStream is = classloader.getResourceAsStream(cfgFileName);
@@ -61,17 +60,18 @@ public final class SpbXMLFileLoader implements Loader {
         this.props.load(is);
         factorsInit();
         this.store = currentStore;
+        this.filePath = currentFilePath;
     }
 
     /**
      * returns object with default configs.
-     * @param currentInput - user input source
+     * @param currentFilePath - path to the source data file
      * @param currentStore - storage.
      * @throws IOException properties exception
      */
-    public SpbXMLFileLoader(final Input currentInput,
+    public SpbXMLFileLoader(final String currentFilePath,
                             final Store currentStore) throws IOException {
-        this(currentInput, DEF_CONF_FILE, currentStore);
+        this(currentFilePath, DEF_CONF_FILE, currentStore);
     }
 
     @Override
@@ -85,9 +85,8 @@ public final class SpbXMLFileLoader implements Loader {
 
     @Override
     public List<Record> getRecordList() {
-        var path = input.askString("Enter source file path: ");
         var list = new ArrayList<Record>();
-        try (var workBook = new XSSFWorkbook(path)) {
+        try (var workBook = new XSSFWorkbook(filePath)) {
             var sheet = workBook.getSheetAt(0);
             var run = true;
             var count = Integer.parseInt(props.getProperty("START_OF_DATA"));

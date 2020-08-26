@@ -8,7 +8,6 @@ package core;
 public interface Action {
     /**
      * executes some action.
-     * @return success/failure
      */
-    boolean execute();
+    void execute();
 }
