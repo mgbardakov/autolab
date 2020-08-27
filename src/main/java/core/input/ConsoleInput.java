@@ -34,7 +34,7 @@ public final class ConsoleInput implements Input {
     @Override
     public Integer askInt(String question) {
         Integer rsl = null;
-        try{
+        try {
             rsl = Integer.parseInt(askString(question));
         } catch (NumberFormatException e) {
             con.accept("Please enter number of the menu item");

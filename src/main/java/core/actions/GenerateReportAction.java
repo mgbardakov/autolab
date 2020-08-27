@@ -52,7 +52,7 @@ public final class GenerateReportAction implements Action {
             }
             try {
                 var pathVar = Paths.get(path);
-                if (!pathVar.isAbsolute()){
+                if (!pathVar.isAbsolute()) {
                     throw new IOException();
                 }
                 var output = new FileWorkbookOutput(path);

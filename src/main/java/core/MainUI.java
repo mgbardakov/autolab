@@ -48,7 +48,7 @@ public class MainUI {
         }
 
     }
-    private Action[] initActions(){
+    private Action[] initActions() {
         return new Action[]{
                 new LoadFromFileAction(store, input, con),
                 new GenerateReportAction(
