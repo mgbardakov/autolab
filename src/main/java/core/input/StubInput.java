@@ -24,4 +24,14 @@ public final class StubInput implements Input {
     public String askString(final String question) {
         return answers[count++];
     }
+
+    @Override
+    public Integer askInt(String question) {
+        return null;
+    }
+
+    @Override
+    public Integer askInt(String question, int maximum) {
+        return null;
+    }
 }

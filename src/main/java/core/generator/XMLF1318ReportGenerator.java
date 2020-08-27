@@ -49,11 +49,10 @@ public final class XMLF1318ReportGenerator implements ReportGenerator {
     /**
      * default constructor.
      * @param newStore - current store
-     * @throws IOException properties exception
      */
     public XMLF1318ReportGenerator(
             final RecordReadable newStore
-    ) throws IOException {
+    ) {
         this(newStore, "genConfig.properties", "templateF1318.xlsx");
     }
     /**
@@ -61,21 +60,24 @@ public final class XMLF1318ReportGenerator implements ReportGenerator {
      * @param newStore = current store
      * @param cfgFileName - configuration file name
      * @param newTemplatePath - path to the template file.
-     * @throws IOException - properties exception
      */
     public XMLF1318ReportGenerator(final RecordReadable newStore,
                                    final String cfgFileName,
-                                   final String newTemplatePath)
-            throws IOException {
-        this.store = newStore;
-        ClassLoader classloader = Thread.currentThread()
-                .getContextClassLoader();
-        InputStream is = classloader
-                .getResourceAsStream(cfgFileName);
-        this.props = new Properties();
-        assert is != null;
-        this.props.load(is);
-        this.templatePath = newTemplatePath;
+                                   final String newTemplatePath) {
+        try {
+            this.store = newStore;
+            ClassLoader classloader = Thread.currentThread()
+                    .getContextClassLoader();
+            InputStream is = classloader
+                    .getResourceAsStream(cfgFileName);
+            this.props = new Properties();
+            assert is != null;
+            this.props.load(is);
+            this.templatePath = newTemplatePath;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
     @Override
     public String getReportName() {

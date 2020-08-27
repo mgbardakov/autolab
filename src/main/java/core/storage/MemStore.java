@@ -2,6 +2,7 @@ package core.storage;
 
 import core.Record;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,9 +11,19 @@ import java.util.List;
  * @since 29.07.2020
  */
 public final class MemStore implements Store, RecordReadable {
+    private List<Record> records;
+    private int currentId;
+
+    public MemStore() {
+        this.records = new ArrayList<>();
+        this.currentId = 1;
+    }
+
     @Override
     public Record addNewRecord(final Record record) {
-        return null;
+          record.setId(String.valueOf(currentId++));
+          records.add(record);
+          return record;
     }
 
     @Override
@@ -26,11 +37,14 @@ public final class MemStore implements Store, RecordReadable {
 
     @Override
     public List<Record> getAllRecords() {
-        return null;
+        return records;
     }
-
     @Override
     public List<Record.Protocol> getAllProtocols() {
-        return null;
+        var rsl = new ArrayList<Record.Protocol>();
+        for (Record record : records) {
+            rsl.addAll(record.getProtocols());
+        }
+        return rsl;
     }
 }

@@ -12,4 +12,17 @@ public interface Input {
      * @return user string
      */
     String askString(String question);
+
+    /**
+     * get int from user
+     * @param question - output for user
+     * @return user int
+     */
+    Integer askInt(String question);
+    /**
+     * get int from user from 0 to maximum value
+     * @param question - output for user
+     * @return user int
+     */
+    Integer askInt(String question, int maximum);
 }

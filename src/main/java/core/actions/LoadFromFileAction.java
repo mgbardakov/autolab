@@ -3,6 +3,7 @@ package core.actions;
 import core.input.Input;
 import core.loader.SpbXMLFileLoader;
 import core.storage.Store;
+import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -53,7 +54,7 @@ public final class LoadFromFileAction implements Action {
                 }
                 var loader = new SpbXMLFileLoader(filePath, store);
                 loader.loadDataToStore();
-            } catch (IOException e) {
+            } catch (InvalidOperationException | IOException e) {
                 con.accept("File not found, try again");
             }
         }

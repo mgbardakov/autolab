@@ -50,6 +50,7 @@ public final class GenerateReportAction implements Action {
                 output.saveReport(generator.createReport());
                 run = false;
             } catch (IOException e) {
+                e.printStackTrace();
                 con.accept("Problems with report path, try again");
              }
         }
