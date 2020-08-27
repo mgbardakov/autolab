@@ -28,29 +28,33 @@ public class MainUI {
     }
 
     public static void main(String[] args) {
-        Consumer<String> con = System.out::println;
+        Consumer<String> con = System.out::print;
         var store = new MemStore();
         var input = new ConsoleInput(con);
         MainUI app = new MainUI(input, store, store, con);
-        var actions = app.showMenu();
+        var actions = app.initActions();
         var run = true;
         while (run) {
+            app.showMenu(actions);
             int i = input.askInt("Choose wisely: ", 3);
             run = actions[i - 1].execute();
         }
     }
 
-    public Action[] showMenu() {
-        Action[] actions = new Action[]{
+    private void showMenu(Action[] actions) {
+        for (int i = 1; i <= actions.length; i++) {
+            con.accept(String.format("%s. %s", i, actions[i - 1].getActionName()));
+            con.accept(System.lineSeparator());
+        }
+
+    }
+    private Action[] initActions(){
+        return new Action[]{
                 new LoadFromFileAction(store, input, con),
                 new GenerateReportAction(
                         input, new XMLF1318ReportGenerator(readable),
                         con),
                 new ExitAction()
         };
-        for (int i = 1; i <= actions.length; i++) {
-            con.accept(String.format("%s. %s", i, actions[i - 1].getActionName()));
-        }
-        return actions;
     }
 }

@@ -56,6 +56,7 @@ public final class LoadFromFileAction implements Action {
                 loader.loadDataToStore();
             } catch (InvalidOperationException | IOException e) {
                 con.accept("File not found, try again");
+                con.accept(System.lineSeparator());
             }
         }
         return true;

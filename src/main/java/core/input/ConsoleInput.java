@@ -38,6 +38,7 @@ public final class ConsoleInput implements Input {
             rsl = Integer.parseInt(askString(question));
         } catch (NumberFormatException e) {
             con.accept("Please enter number of the menu item");
+            con.accept(System.lineSeparator());
             askInt(question);
         }
         return rsl;
