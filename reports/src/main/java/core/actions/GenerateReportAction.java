@@ -7,7 +7,6 @@ import core.generator.ReportGenerator;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 /**
  * user action for creation and saving report.

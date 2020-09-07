@@ -1,7 +1,5 @@
 package core.input;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Scanner;
 import java.util.function.Consumer;
 

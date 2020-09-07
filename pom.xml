@@ -6,12 +6,17 @@
 
     <groupId>org.example</groupId>
     <artifactId>autolab</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.0.1</version>
+    <modules>
+        <module>reports</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>13</maven.compiler.source>
         <maven.compiler.target>13</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <manifest.file>Main</manifest.file>
     </properties>
 
     <dependencies>
@@ -119,9 +124,13 @@
                         </goals>
                         <configuration>
                             <artifactSet>
-                                <includes>
-                                    <include>org.apache.poi:*:*:*</include>
-                                </includes>
+                                <excludes>
+                                    <exclude>org.hamcrest:*:*:*</exclude>
+                                    <exclude>junit:*:*:*</exclude>
+                                    <exclude>org.apache.logging.log4j:*:*:*</exclude>
+                                    <exclude>org.postgresql:*:*:*</exclude>
+                                    <exclude>org.quartz-scheduler:*:*:*</exclude>
+                                </excludes>
                             </artifactSet>
                         </configuration>
                     </execution>

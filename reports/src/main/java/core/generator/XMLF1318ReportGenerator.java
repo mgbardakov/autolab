@@ -106,12 +106,19 @@ public final class XMLF1318ReportGenerator implements ReportGenerator {
     getValuesTable() {
         var rslMap = new HashMap<String, Map<String, Integer[]>>();
         var protocolsList = store.getAllProtocols();
-        for (Record.Protocol protocol : protocolsList) {
-            var firstKey = getReportFactor(protocol.getFactor());
-            addToMap(rslMap, protocol, firstKey);
-            if (protocol.getPurpose() != Record.Purpose.COMMERCIAL) {
-                addToMap(rslMap, protocol, "NADZOR");
+        try {
+            if (protocolsList == null) {
+                throw new IllegalArgumentException("protocol list is null");
             }
+            for (Record.Protocol protocol : protocolsList) {
+                var firstKey = getReportFactor(protocol.getFactor());
+                addToMap(rslMap, protocol, firstKey);
+                if (protocol.getPurpose() != Record.Purpose.COMMERCIAL) {
+                    addToMap(rslMap, protocol, "NADZOR");
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
         return rslMap;
     }
