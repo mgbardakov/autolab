@@ -1,3 +1,5 @@
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
@@ -27,8 +29,8 @@ public class XlsxFileDataParser implements DataParser {
         try (var book = new XSSFWorkbook(path)) {
             var sheet = book.getSheetAt(0);
             for (String key : props.stringPropertyNames()) {
-                rslMap.put(key, sheet.getRow(getIntegerProperty(key))
-                                .getCell(DATA_COLUMN).getStringCellValue());
+                rslMap.put(key, getStringFromCell(sheet.getRow(getIntegerProperty(key))
+                                .getCell(DATA_COLUMN)));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,4 +43,16 @@ public class XlsxFileDataParser implements DataParser {
     private int getIntegerProperty(String key) {
         return Integer.parseInt(props.getProperty(key));
     }
+
+    private String getStringFromCell(Cell cell) {
+        var rsl = "";
+        if (cell.getCellType() == CellType.STRING) {
+            rsl = cell.getStringCellValue();
+        } else if (cell.getCellType() == CellType.NUMERIC) {
+          rsl = String.valueOf(cell.getNumericCellValue());
+          rsl = rsl.substring(0, rsl.length() - 2);
+        }
+        return rsl;
+    }
+
 }
