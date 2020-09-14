@@ -8,16 +8,32 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class XlsxFileDataParser implements DataParser {
+public final class XlsxFileDataParser implements DataParser {
+    /**
+     * path to the data source file.
+     */
     private String path;
+    /**
+     * configurations.
+     */
     private Properties props;
-    private final static int DATA_COLUMN = 2;
+    /**
+     * column number of main data.
+     */
+    private static final int DATA_COLUMN = 2;
 
-    public XlsxFileDataParser(String path) throws IOException {
-        this.path = path;
+    /**
+     * main constructor.
+     * @param newPath - path to the source file
+     * @param cfgFileName - config file name
+     * @throws IOException can not reach property file
+     */
+    public XlsxFileDataParser(final String newPath,
+                              final String cfgFileName) throws IOException {
+        this.path = newPath;
         ClassLoader classloader = Thread.currentThread()
                 .getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream("cfg.properties");
+        InputStream is = classloader.getResourceAsStream(cfgFileName);
         this.props = new Properties();
         assert is != null;
         props.load(is);
@@ -29,7 +45,8 @@ public class XlsxFileDataParser implements DataParser {
         try (var book = new XSSFWorkbook(path)) {
             var sheet = book.getSheetAt(0);
             for (String key : props.stringPropertyNames()) {
-                rslMap.put(key, getStringFromCell(sheet.getRow(getIntegerProperty(key))
+                rslMap.put(key, getStringFromCell(
+                        sheet.getRow(getIntegerProperty(key))
                                 .getCell(DATA_COLUMN)));
             }
         } catch (IOException e) {
@@ -40,11 +57,11 @@ public class XlsxFileDataParser implements DataParser {
         }
         return rslMap;
     }
-    private int getIntegerProperty(String key) {
+    private int getIntegerProperty(final String key) {
         return Integer.parseInt(props.getProperty(key));
     }
 
-    private String getStringFromCell(Cell cell) {
+    private String getStringFromCell(final Cell cell) {
         var rsl = "";
         if (cell.getCellType() == CellType.STRING) {
             rsl = cell.getStringCellValue();

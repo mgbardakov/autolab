@@ -5,12 +5,20 @@ import java.util.Map;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
-public class TextReplacer {
+public final class TextReplacer {
 
-    private static Map<Integer, XWPFRun> getPosToRuns(XWPFParagraph paragraph) {
+    private TextReplacer() {
+
+    }
+    private static Map<Integer, XWPFRun> getPosToRuns(
+            final XWPFParagraph paragraph
+    ) {
         int pos = 0;
-        Map<Integer, XWPFRun> map = new HashMap<>(10);
+        Map<Integer, XWPFRun> map = new HashMap<>();
         for (XWPFRun run : paragraph.getRuns()) {
             String runText = run.text();
             if (runText != null) {
@@ -23,27 +31,32 @@ public class TextReplacer {
         return (map);
     }
 
-    public static <V> void replace(XWPFDocument document, Map<String, V> map) {
-        List<XWPFParagraph> paragraphs = document.getParagraphs();
-        for (XWPFParagraph paragraph : paragraphs) {
-            replace(paragraph, map);
-        }
-    }
-
-    public static  void replace(XWPFDocument document, String searchText, String replacement) {
+    /**
+     * replaces bookmarks in template document.
+     * @param document template document
+     * @param searchText bookmark
+     * @param replacement replacement
+     */
+    public static void replace(final XWPFDocument document,
+                               final String searchText,
+                               final String replacement) {
         List<XWPFParagraph> paragraphs = document.getParagraphs();
         for (XWPFParagraph paragraph : paragraphs) {
             replace(paragraph, searchText, replacement);
         }
-    }
-
-    private static <V> void replace(XWPFParagraph paragraph, Map<String, V> map) {
-        for (Map.Entry<String, V> entry : map.entrySet()) {
-            replace(paragraph, entry.getKey(), entry.getValue());
+        for (XWPFTable tbl : document.getTables()) {
+            for (XWPFTableRow row : tbl.getRows()) {
+                for (XWPFTableCell cell : row.getTableCells()) {
+                    for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                        replace(paragraph, searchText, replacement);
+                    }
+                }
+            }
         }
     }
-
-    public static <V> void replace(XWPFParagraph paragraph, String searchText, V replacement) {
+    private static void replace(final XWPFParagraph paragraph,
+                                final String searchText,
+                               final String replacement) {
         boolean found = true;
         while (found) {
             found = false;
@@ -55,7 +68,7 @@ public class TextReplacer {
                 XWPFRun lastRun = posToRuns.get(pos + searchText.length() - 1);
                 int runNum = paragraph.getRuns().indexOf(run);
                 int lastRunNum = paragraph.getRuns().indexOf(lastRun);
-                String[] texts = replacement.toString().split("\n");
+                String[] texts = replacement.split("\n");
                 run.setText(texts[0], 0);
                 XWPFRun newRun = run;
                 for (int i = 1; i < texts.length; i++) {
@@ -85,7 +98,8 @@ public class TextReplacer {
                     newRun.setSubscript(run.getSubscript());
                     newRun.setUnderline(run.getUnderline());
                 }
-                for (int i = lastRunNum + texts.length - 1; i > runNum + texts.length - 1; i--) {
+                for (int i = lastRunNum + texts.length - 1;
+                     i > runNum + texts.length - 1; i--) {
                     paragraph.removeRun(i);
                 }
             }
