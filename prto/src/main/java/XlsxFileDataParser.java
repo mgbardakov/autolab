@@ -10,60 +10,50 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public final class XlsxFileDataParser implements DataParser {
+public class XlsxFileDataParser implements DataParser, AutoCloseable {
     /**
-     * path to the data source file.
+     * source file.
      */
-    private String path;
-    /**
-     * configurations.
-     */
-    private Properties props;
+    protected XSSFWorkbook book;
     /**
      * column number of main data.
      */
     private static final int DATA_COLUMN = 2;
-
+    private String propFileName;
+    /**
+     * number of the main information sheet
+     */
+    private static final int MAIN_INFORMATION_SHEET = 0;
     /**
      * main constructor.
      * @param newPath - path to the source file
-     * @param cfgFileName - config file name
+     * @param newPropFileName - prop file name
      * @throws IOException can not reach property file
      */
     public XlsxFileDataParser(final String newPath,
-                              final String cfgFileName) throws IOException {
-        this.path = newPath;
-        ClassLoader classloader = Thread.currentThread()
-                .getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream(cfgFileName);
-        this.props = new Properties();
-        assert is != null;
-        props.load(is);
+                              final String newPropFileName) throws IOException {
+        this.book = new XSSFWorkbook(newPath);
+        this.propFileName = newPropFileName;
     }
-
     @Override
     public Map<String, String> getData() throws ObjectNotFoundException {
         Map<String, String> rslMap = new HashMap<>();
-        try (var book = new XSSFWorkbook(path)) {
-            var sheet = book.getSheetAt(0);
+        var props = getProperties(propFileName);
+            var sheet = book.getSheetAt(MAIN_INFORMATION_SHEET);
             for (String key : props.stringPropertyNames()) {
                 rslMap.put(key, getStringFromCell(
-                        sheet.getRow(getIntegerProperty(key))
-                                .getCell(DATA_COLUMN), book));
+                        sheet.getRow(getIntegerProperty(key, props))
+                                .getCell(DATA_COLUMN)));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         if (rslMap.size() == 0) {
             throw new ObjectNotFoundException();
         }
         return rslMap;
     }
-    private int getIntegerProperty(final String key) {
+    private int getIntegerProperty(final String key, Properties props) {
         return Integer.parseInt(props.getProperty(key));
     }
-
-    private String getStringFromCell(final Cell cell, final Workbook wb) {
+    protected String getStringFromCell(final Cell cell) {
         var rsl = "";
         if (cell.getCellType() == CellType.STRING) {
             rsl = cell.getStringCellValue();
@@ -71,10 +61,25 @@ public final class XlsxFileDataParser implements DataParser {
           rsl = String.valueOf(cell.getNumericCellValue());
           rsl = rsl.substring(0, rsl.length() - 2);
         } else if (cell.getCellType() == CellType.FORMULA) {
-            FormulaEvaluator fe = wb.getCreationHelper().createFormulaEvaluator();
+            FormulaEvaluator fe = book.getCreationHelper().createFormulaEvaluator();
             rsl = fe.evaluate(cell).getStringValue();
         }
         return rsl;
     }
-
+    protected Properties getProperties(final String cfgFileName) {
+        var rsl = new Properties();
+        ClassLoader classloader = Thread.currentThread()
+                .getContextClassLoader();
+        try(InputStream is = classloader.getResourceAsStream(cfgFileName)) {
+            assert is != null;
+            rsl.load(is);
+        } catch (IOException e ) {
+            e.printStackTrace();
+        }
+       return rsl;
+    }
+    @Override
+    public void close() throws Exception {
+        book.close();
+    }
 }

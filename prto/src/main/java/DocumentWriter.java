@@ -29,12 +29,12 @@ public class DocumentWriter {
     public void writeDocument(final String cfgFile,
                                      final String templateFile,
                                      final String rslFileName) {
-        try (var fos = new FileOutputStream(folderPath + rslFileName)) {
-            var map = new XlsxFileDataParser(dataSource,
-                    cfgFile).getData();
-            var doc = new DocGenerator(templateFile).generateDocument(map);
+        try (var fos = new FileOutputStream(folderPath + rslFileName);
+             var book = new XlsxFileDataParser(dataSource, cfgFile)) {
+             var map = book.getData();
+             var doc = new DocGenerator(templateFile).generateDocument(map);
             doc.write(fos);
-        } catch (IOException | ObjectNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
