@@ -46,9 +46,7 @@ public class Application {
     }
     private Command[] initActions() {
         return new Command[]{
-                new WriteExpertiseAndAct(input),
-                new WriteExpertiseAndActRoofs(input),
-                new WriteTitleAndInventory(input),
+                new AddProjectToTable(),
                 new Exit()
         };
     }

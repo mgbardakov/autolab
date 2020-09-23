@@ -1,7 +1,6 @@
 import org.apache.poi.ss.usermodel.Row;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -18,16 +17,18 @@ public class ProjectDataParser extends XlsxFileDataParser {
             "freq", "mod", "trans", "power", "amp", "gDiag", "vDiag", "asimut",
             "eAngle", "mAngle", "groundHeight", "supportHeight"};
     private static final String[] BUILDING_KEYS = new String[] {"asimut", "name",
-            "height", "distance"};
-    private static final String[] ZOZ_KEYS = new String[] {"asimut", "height",
-            "distance"};
+            "height","quantity", "distance"};
     public ProjectDataParser(final String newPath) throws IOException {
         super(newPath, MAIN_PROJECT_PROPS);
     }
 
     @Override
     public Map<String, String> getData() throws ObjectNotFoundException {
-        return super.getData();
+        var rslMap = super.getData();
+        rslMap.put("table", getTable());
+        rslMap.put("ZOZ", getZOZ());
+        rslMap.put("buildings", getBuildings());
+        return rslMap;
     }
 
     private String getTable() {
@@ -50,7 +51,7 @@ public class ProjectDataParser extends XlsxFileDataParser {
                 rslBuilder.append(String.format("%s %s; %s МГц; %s; %s шт.;"
                         + " %s Вт; %s dBi; ДН: гориз. %s град., верт. %s град.;"
                         + " %s град.; УН: электр. %s град., мех. %s град.;"
-                        + " %s/%s м.", (Object[])transformKeysToArguments(TABLE_KEYS,
+                        + " %s/%sм;", (Object[])transformKeysToArguments(TABLE_KEYS,
                         row, tableProps))).append(System.lineSeparator());
                 count++;
             } else {
@@ -59,7 +60,7 @@ public class ProjectDataParser extends XlsxFileDataParser {
         }
         return rslBuilder.toString();
     }
-    public String getBuildings() {
+    private String getBuildings() {
         var sheet = book.getSheetAt(3);
         var rslBuilder = new StringBuilder();
         var run = true;
@@ -68,10 +69,13 @@ public class ProjectDataParser extends XlsxFileDataParser {
         while (run) {
             var row = sheet.getRow(count);
             if (row != null) {
+                var args = transformKeysToArguments(BUILDING_KEYS,
+                        row, buildProps);
                 rslBuilder.append(String.format("- в направлении %s град. - "
-                        + "%s высотой %s м., расположенное на расстоянии %s м.",
-                        (Object[])transformKeysToArguments(BUILDING_KEYS,
-                        row, buildProps))).append(System.lineSeparator());
+                        + "%s высотой %s м, расположенн%sе на расстоянии %sм;",
+                        args[0], args[1], args[2],
+                        args[3].equals("ед. ч.") ? "о" : "ы", args[4]))
+                        .append(System.lineSeparator());
                 count++;
             } else {
                 run = false;
@@ -79,7 +83,7 @@ public class ProjectDataParser extends XlsxFileDataParser {
         }
         return rslBuilder.toString();
     }
-    public String getZOZ() {
+    private String getZOZ() {
         var sheet = book.getSheetAt(2);
         var rslBuilder = new StringBuilder();
         var run = true;
@@ -96,10 +100,10 @@ public class ProjectDataParser extends XlsxFileDataParser {
                     if (!firstMap.containsKey(asimut)) {
                         firstMap.put(asimut, new String[]{height, distance});
                     } else {
-                        if (getInt(firstMap.get(asimut)[0]) < getInt(height)) {
+                        if (getDouble(firstMap.get(asimut)[0]) < getDouble(height)) {
                             firstMap.get(asimut)[0] = height;
                         }
-                        if (getInt(firstMap.get(asimut)[1]) > getInt(distance)) {
+                        if (getDouble(firstMap.get(asimut)[1]) > getDouble(distance)) {
                             firstMap.get(asimut)[1] = distance;
                         }
                     }
@@ -114,7 +118,7 @@ public class ProjectDataParser extends XlsxFileDataParser {
             if (!secondMap.containsKey(height)) {
                 secondMap.put(height, new String[]{asimut, distance});
             } else {
-                if (getInt(secondMap.get(height)[1]) < getInt(distance)) {
+                if (getDouble(secondMap.get(height)[1]) < getDouble(distance)) {
                     secondMap.get(height)[1] = distance;
                 }
                 secondMap.get(height)[0] = String.format("%s, %s",
@@ -123,7 +127,7 @@ public class ProjectDataParser extends XlsxFileDataParser {
         }
         for (String key : secondMap.keySet()) {
             rslBuilder.append(String.format("- по азимут%s %s град. - %s м. "
-                    + "от поверхности земли протяженностью не более %s м.",
+                    + "от поверхности земли протяженностью не более %sм;",
                     secondMap.get(key)[0].contains(",") ? "ам" : "у",
                     secondMap.get(key)[0], key, secondMap.get(key)[1]))
                     .append(System.lineSeparator());
@@ -144,7 +148,7 @@ public class ProjectDataParser extends XlsxFileDataParser {
         }
         return rsl;
     }
-    private Integer getInt(String s) {
-        return Integer.parseInt(s);
+    private Double getDouble(String s) {
+        return Double.parseDouble(s);
     }
 }

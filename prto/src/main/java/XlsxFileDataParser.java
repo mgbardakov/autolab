@@ -58,13 +58,20 @@ public class XlsxFileDataParser implements DataParser, AutoCloseable {
         if (cell.getCellType() == CellType.STRING) {
             rsl = cell.getStringCellValue();
         } else if (cell.getCellType() == CellType.NUMERIC) {
-          rsl = String.valueOf(cell.getNumericCellValue());
-          rsl = rsl.substring(0, rsl.length() - 2);
+            double d = cell.getNumericCellValue();
+          rsl = getNiceSNumber(d);
+         // rsl = rsl.substring(0, rsl.length() - 2);
         } else if (cell.getCellType() == CellType.FORMULA) {
             FormulaEvaluator fe = book.getCreationHelper().createFormulaEvaluator();
             rsl = fe.evaluate(cell).getStringValue();
         }
         return rsl;
+    }
+    private String getNiceSNumber(final double d) {
+        if(d == (long) d)
+            return String.format("%d",(long)d);
+        else
+            return String.format("%s",d);
     }
     protected Properties getProperties(final String cfgFileName) {
         var rsl = new Properties();
